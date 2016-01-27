@@ -1,0 +1,13 @@
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+TODO.md
+*.gem
+test/cassettes/*
+test/config/application.rb
