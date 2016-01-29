@@ -58,7 +58,7 @@ One45::Questions.find(504)
 ### Entities Implemented
 
 Entity | Methods
---     | --
+---    | ---
 Evaluation | list, find, answers, contributors, question_answers
 Event | ahd_events, ahd_event, ahd_attendees, curriculum_events, curriculum_event, curriculum_event_attendees, curriculum_event_children, rotation_events, rotation_event, rotation_attendees
 Form | list, find, groups, questions
