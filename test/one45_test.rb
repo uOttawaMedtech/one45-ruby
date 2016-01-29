@@ -11,6 +11,7 @@ class One45Test < Minitest::Test
 
   def test_domains_exist
     assert One45::Evaluations
+    assert One45::Events
     assert One45::Forms
     assert One45::Groups
     assert One45::Questions
@@ -32,7 +33,6 @@ class One45Test < Minitest::Test
       response = One45.generate_token(One45.client_key, One45.client_secret)
       refute_nil response
       assert_equal String, response.class
-      # puts response
     end
   end
 
@@ -49,7 +49,6 @@ class One45Test < Minitest::Test
       response = One45::Questions.find(504)
       refute_nil response
       assert_equal Hash, response.class
-      # puts response
     end
   end
 
@@ -58,7 +57,6 @@ class One45Test < Minitest::Test
       response = One45::Users.list
       refute_nil response
       assert_equal Array, response.class
-      # puts response
     end
   end
 
@@ -67,7 +65,6 @@ class One45Test < Minitest::Test
       response = One45::Users.list(firstname: "Paul")
       refute_nil response
       assert_equal Array, response.class
-      # puts response
     end
   end
 
@@ -76,7 +73,6 @@ class One45Test < Minitest::Test
       response = One45::Users.find(706)
       refute_nil response
       assert_equal Hash, response.class
-      # puts response
     end
   end
 
@@ -85,7 +81,6 @@ class One45Test < Minitest::Test
       response = One45::Users.preferences(706)
       refute_nil response
       assert_equal Hash, response.class
-      # puts response
     end
   end
 
@@ -94,7 +89,6 @@ class One45Test < Minitest::Test
       response = One45::Users.todos(706)
       refute_nil response
       assert_equal Array, response.class
-      # puts response
     end
   end
 
@@ -103,7 +97,6 @@ class One45Test < Minitest::Test
       response = One45::Users.evaluations(706)
       refute_nil response
       assert_equal Array, response.class
-      # puts response
     end
   end
 
@@ -112,7 +105,6 @@ class One45Test < Minitest::Test
       response = One45::Rotations.list
       refute_nil response
       assert_equal Array, response.class
-      # puts response
     end
   end
 
@@ -121,7 +113,6 @@ class One45Test < Minitest::Test
       response = One45::Rotations.find(504)
       refute_nil response
       assert_equal Hash, response.class
-      # puts response
     end
   end
 
@@ -131,7 +122,6 @@ class One45Test < Minitest::Test
       refute_nil response
       assert_equal Array, response.class
       assert_equal 2, response.length
-      # puts response
     end
   end
 
@@ -140,7 +130,6 @@ class One45Test < Minitest::Test
       response = One45::Groups.find(32)
       refute_nil response
       assert_equal Hash, response.class
-      # puts response
     end
   end
 
@@ -149,7 +138,6 @@ class One45Test < Minitest::Test
       response = One45::Groups.subgroups(32)
       refute_nil response
       assert_equal Array, response.class
-      # puts response
     end
   end
 
@@ -159,7 +147,6 @@ class One45Test < Minitest::Test
       refute_nil response
       assert_equal Array, response.class
       assert_equal 2, response.length
-      # puts response
     end
   end
 
@@ -168,7 +155,6 @@ class One45Test < Minitest::Test
       response = One45::Forms.find(1)
       refute_nil response
       assert_equal Hash, response.class
-      # puts response
     end
   end
 
@@ -177,7 +163,6 @@ class One45Test < Minitest::Test
       response = One45::Forms.groups(1)
       refute_nil response
       assert_equal Array, response.class
-      # puts response
     end
   end
 
@@ -186,7 +171,6 @@ class One45Test < Minitest::Test
       response = One45::Forms.questions(1)
       refute_nil response
       assert_equal Array, response.class
-      # puts response
     end
   end
 
@@ -196,7 +180,6 @@ class One45Test < Minitest::Test
       refute_nil response
       assert_equal Array, response.class
       assert_equal 1, response.length
-      # puts response
     end
   end
 
@@ -206,7 +189,6 @@ class One45Test < Minitest::Test
       refute_nil response
       assert_equal Array, response.class
       assert_equal "completed", response[0]["status"]
-      # puts response
     end
   end
 
@@ -219,7 +201,6 @@ class One45Test < Minitest::Test
       assert_equal Array, response.class
       completed_on = response[0]["completed_on"]
       assert completed_on, (Time.new(starting)..Time.new(ending)).cover?(completed_on)
-      # puts response
     end
   end
 
@@ -228,7 +209,6 @@ class One45Test < Minitest::Test
       response = One45::Evaluations.find(59)
       refute_nil response
       assert_equal Hash, response.class
-      # puts response
     end
   end
 
@@ -237,7 +217,6 @@ class One45Test < Minitest::Test
       response = One45::Evaluations.answers(59)
       refute_nil response
       assert_equal Array, response.class
-      # puts response
     end
   end
 
@@ -246,7 +225,6 @@ class One45Test < Minitest::Test
       response = One45::Evaluations.contributors(59)
       refute_nil response
       assert_equal Array, response.class
-      # puts response
     end
   end
 
@@ -255,7 +233,87 @@ class One45Test < Minitest::Test
       response = One45::Evaluations.question_answers(59, 12915)
       refute_nil response
       assert_equal Hash, response.class
-      # puts response
     end
   end
+
+  def test_it_retrieves_list_of_ahd_events
+    VCR.use_cassette('ahd_events') do
+      response = One45::Events.ahd_events
+      refute_nil response
+      assert_equal Array, response.class
+    end
+  end
+
+  def test_it_finds_ahd_event_by_id
+    VCR.use_cassette('ahd_event') do
+      response = One45::Events.ahd_event(211)
+      refute_nil response
+      assert_equal Hash, response.class
+    end
+  end
+
+  def test_it_finds_ahd_attendees
+    VCR.use_cassette('ahd_attendees') do
+      response = One45::Events.ahd_attendees(211)
+      refute_nil response
+      assert_equal Hash, response.class
+    end
+  end
+
+  def test_it_retrieves_list_of_curriculum_events
+    VCR.use_cassette('curriculum_events') do
+      response = One45::Events.curriculum_events
+      refute_nil response
+      assert_equal Array, response.class
+    end
+  end
+
+  def test_it_finds_curriculum_event_by_id
+    VCR.use_cassette('curriculum_event') do
+      response = One45::Events.curriculum_event(1)
+      refute_nil response
+      assert_equal Hash, response.class
+    end
+  end
+
+  def test_it_finds_curriculum_event_attendees
+    VCR.use_cassette('curriculum_event_attendees') do
+      response = One45::Events.curriculum_event_attendees(1)
+      refute_nil response
+      assert_equal Array, response.class
+    end
+  end
+
+  def test_it_finds_curriculum_event_children
+    VCR.use_cassette('curriculum_event_children') do
+      response = One45::Events.curriculum_event_children(1)
+      refute_nil response
+      assert_equal Array, response.class
+    end
+  end
+
+  def test_it_retrieves_list_of_rotation_events
+    VCR.use_cassette('rotation_events') do
+      response = One45::Events.rotation_events
+      refute_nil response
+      assert_equal Array, response.class
+    end
+  end
+
+  def test_it_finds_rotation_event_by_id
+    VCR.use_cassette('rotation_event') do
+      response = One45::Events.rotation_event(1)
+      refute_nil response
+      assert_equal Hash, response.class
+    end
+  end
+
+  def test_it_finds_rotation_attendees
+    VCR.use_cassette('rotation_attendees') do
+      response = One45::Events.rotation_attendees(1)
+      refute_nil response
+      assert_equal Hash, response.class
+    end
+  end
+
 end

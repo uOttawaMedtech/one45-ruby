@@ -8,6 +8,7 @@ require "one45/base"
 
 # API resources
 require "one45/evaluations"
+require "one45/events"
 require "one45/forms"
 require "one45/groups"
 require "one45/questions"
@@ -32,7 +33,7 @@ module One45
         # puts "generated access_token: #{@access_token}"
         @access_token
       rescue => e
-        One45Error.new("error: #{e.class} : #{e.response} : #{e.response}")
+        One45Error.new("#{e.class} - #{e.response}")
       end
     end
 

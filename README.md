@@ -60,11 +60,12 @@ One45::Questions.find(504)
 Entity | Methods
 --     | --
 Evaluation | list, find, answers, contributors, question_answers
+Event | ahd_events, ahd_event, ahd_attendees, curriculum_events, curriculum_event, curriculum_event_attendees, curriculum_event_children, rotation_events, rotation_event, rotation_attendees
 Form | list, find, groups, questions
 Group | list, find, subgroups
 Question | list, find
 Rotation | list, find
-User | list, find, preferences, todos, evaluations
+People (as user) | list, find, preferences, todos, evaluations
 
 __Current limits__
 
